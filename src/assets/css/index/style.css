@@ -1,0 +1,85 @@
+.header {
+  color: #444;
+}
+.margin-top-20 {
+  margin-top: 20px;
+}
+body {
+  background-color: #f2f2f2;
+  color: #444;
+  font-size: 20px;
+  margin: 0 20px;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 100;
+}
+.bordered {
+  border-top: dotted 1px black;
+  border-bottom: solid 2px black;
+}
+#menu a {
+  color: #111;
+  border-top: dotted 1px black;
+  border-bottom: solid 2px black;
+}
+.post {
+  border-top: dotted 1px black;
+  border-bottom: solid 2px black;
+  color: #444;
+  -webkit-transform: rotate(25deg);
+          transform: rotate(25deg);
+}
+.button {
+  margin-top: 20px;
+  border: none;
+  border-radius: 4px;
+  outline: none;
+  cursor: pointer;
+  background-color: #39cf5a;
+  padding: 10px 20px;
+  color: #f2f2f2;
+  font-size: 20px;
+  font-weight: 100;
+  min-width: 150px;
+  line-height: 1;
+  white-space: nowrap;
+  text-align: center;
+  letter-spacing: .3em;
+}
+.button:active {
+  background-color: #27e150;
+}
+.headers {
+  border-top: dotted 1px black;
+  border-bottom: solid 2px black;
+  color: #444;
+  -webkit-transform: rotate(25deg);
+          transform: rotate(25deg);
+  font-size: 25px;
+  margin-top: 250px;
+}
+.headers .navigation {
+  font-size: 12px;
+}
+.headers .logo {
+  width: 300px;
+}
+a:hover {
+  color: #6789AD;
+}
+.clearfix {
+  display: block;
+  zoom: 1;
+}
+.clearfix:after {
+  content: " ";
+  font-size: 0;
+  height: 0;
+  clear: both;
+  visibility: hidden;
+}
