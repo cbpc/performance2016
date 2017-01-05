@@ -1,3 +1,6 @@
+(function (global) {
+  var babelHelpers = global.babelHelpers = {};
+})(typeof global === "undefined" ? self : global);
 /*!
  * Vue.js v2.1.4
  * (c) 2014-2016 Evan You

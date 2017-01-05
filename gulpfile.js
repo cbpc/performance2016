@@ -117,7 +117,7 @@ gulp.task('css', function() {
 //开发环境
 gulp.task('js', function() {
 	var jsList = getAssetsOrder(SRC.css, SRC.js);
-	return gulp.src(jsList.js)
+	return gulp.src([SRC.jsDest + '/babelHelpers.js'].concat(jsList.js))
 		.pipe(plumber({ //plumber触发错误提示
 			errorHandler: onError
 		}))
@@ -131,7 +131,7 @@ gulp.task('js', function() {
 			],
 			plugins: [
 				'transform-object-assign', //转换es6 Object.assign插件
-				//'external-helpers', //将es6代码转换后使用的公用函数单独抽出来保存为babelHelpers
+				'external-helpers', //将es6代码转换后使用的公用函数单独抽出来保存为babelHelpers
 				['transform-es2015-classes', {
 					"loose": false
 				}], //转换es6 class插件
@@ -151,7 +151,7 @@ gulp.task('js', function() {
 				SRC.js + "/elementUI.js"
 			]
 		}))
-		//.pipe(babelHelpers('babelHelpers.js'))
+		.pipe(babelHelpers('babelHelpers.js'))
 		.pipe(gulp.dest(SRC.jsDest));
 });
 
@@ -298,8 +298,8 @@ gulp.task('watch', function() {
 });
 
 gulp.task('default', function(callback) {
-	if (PRODUCTION) {
-		runSequence('clean', /*'sprite',*/ 'less', ['img', 'css', 'browser-js'], 'concat-js', 'revision', ['zip-html', 'handlejs', 'copyimg', 'copyfont', 'copyhtml']);
+	if (PRODUCTION) {//, 'browser-js'
+		runSequence('clean', /*'sprite',*/ 'less', ['img', 'css', 'js'], 'concat-js', 'revision', ['zip-html', 'handlejs', 'copyimg', 'copyfont', 'copyhtml']);
 	} else {
 		runSequence('clean', /*'sprite',*/ 'less', ['css', 'js'], 'concat-js', ['copyimg', 'copyfont', 'copyhtml']);
 	}
