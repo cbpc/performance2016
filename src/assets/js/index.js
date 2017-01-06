@@ -11,7 +11,7 @@ const scoreList = [{
 	value: '10'
 }, {
 	label: '良好',
-	value: '9'
+	value: '8'
 }, {
 	label: '称职',
 	value: '7'
@@ -69,7 +69,7 @@ var vm = new Vue({
 			};
 			list = vm.users.forEach((item) => {
 				obj.excellent += (item.value == '10');
-				obj.good += (item.value == '9');
+				obj.good += (item.value == '8');
 			});
 			return obj;
 		}
