@@ -14,9 +14,8 @@ Vue.use(ElementUI);
 import home from './components/Home';
 import vote from './components/Vote';
 import score from './components/Score';
-// const score = {
-// 	template: '<div><h2>我是第 1 个子页面</h2></div>'
-// };
+//import score from './assets/js/Score';
+
 //VUEX数据
 import store from './store';
 
@@ -39,7 +38,7 @@ const routes = [{
 }, {
 	path: '/score',
 	component: score
-}, ];
+}];
 
 const router = new VueRouter({
 	//mode: 'history',//启用后URL中无#字符，需做后端apache/nginx配置

@@ -1,5 +1,5 @@
-<template>
-  <div>
+const score = {
+	template: `<div>
     <h2 class="title">2016年度绩效评价得分</h2>
     <el-table
       :data="tableData"
@@ -77,61 +77,54 @@
       <button class="button" @click="clear">清理缓存</button>
     </div>
   </div>
-</template>
+	`,
+	data() {
+		return {
+			tableData: [],
+			distribData: []
+		};
+	},
+	methods: {
+		refresh() {
+			this.$http.jsonp('http://cbpc540.applinzi.com/index.php?s=/addon/GoodVoice/GoodVoice/getPerformanceScore', {
+					params: {
+						id: this.$store.state.voteType
+					}
+				})
+				.then((response) => {
+					this.tableData = response.data;
+					this.$message({
+						message: '数据刷新完毕',
+						type: 'success'
+					});
+				});
 
-<script>
-  export default {
-    name: 'score',
-    data() {
-      return {
-        tableData: [],
-        distribData:[]
-      }
-    },
-    methods: {
-      refresh() {
-        this.$http.jsonp('http://cbpc540.applinzi.com/index.php?s=/addon/GoodVoice/GoodVoice/getPerformanceScore', {
-            params: {
-              id: this.$store.state.voteType
-            }
-          })
-          .then((response) => {
-            this.tableData = response.data;
-            this.$message({
-              message: '数据刷新完毕',
-              type: 'success'
-            });
-          });
+			this.$http.jsonp('http://cbpc540.applinzi.com/index.php?s=/addon/GoodVoice/GoodVoice/getPerformanceDis', {
+					params: {
+						id: this.$store.state.voteType
+					}
+				})
+				.then((response) => {
+					this.distribData = response.data;
+					this.$message({
+						message: '数据刷新完毕',
+						type: 'success'
+					});
+				});
 
-        this.$http.jsonp('http://cbpc540.applinzi.com/index.php?s=/addon/GoodVoice/GoodVoice/getPerformanceDis', {
-            params: {
-              id: this.$store.state.voteType
-            }
-          })
-          .then((response) => {
-            this.distribData = response.data;
-            this.$message({
-              message: '数据刷新完毕',
-              type: 'success'
-            });
-          });
+		},
+		clear() {
+			localStorage.removeItem('performance-1');
+			localStorage.removeItem('performance-2');
+			this.$message({
+				message: '缓存清理完毕',
+				type: 'success'
+			});
+		}
+	},
+	mounted() {
+		this.refresh();
+	}
+};
 
-      },
-      clear() {
-        localStorage.removeItem('performance-1');
-        localStorage.removeItem('performance-2');
-        this.$message({
-          message: '缓存清理完毕',
-          type: 'success'
-        });
-      }
-    },
-    mounted() {
-      this.refresh();
-    }
-  }
-  </script>
-
-  <style lang="less">
-    @import '../less/vote.less';
-  </style>
+export default score;
