@@ -103,6 +103,7 @@ var vote = {
       // }, (response) => {
       //     console.log(response);
       // });
+      this.$store.state.voteStep = this.$store.state.voteStep+1;
       this.back();
         this.$message({
           message: '提交数据成功',
