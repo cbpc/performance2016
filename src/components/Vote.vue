@@ -79,30 +79,35 @@ var vote = {
       });
       //state.back();
       //write the data to localStorage
-      var url='http://localhost/DataInterface/Api';
-      console.log('以下是将要提交的数据：\n',JSON.stringify(votes));
-      this.$http.jsonp(
-        url,
-        {
-          params: {
-            Token:'79d84495ca776ccb523114a2120e273ca80b315b',
-            ID:'290',
-            M:'0',
-            cart:'1620A285',
-            cache:'60'
-          }
-        }
-      ).then((response) => {
-        console.log(response.data);
-        this.$store.state.voteStep = this.$store.state.voteStep+1;
-        this.back();
+      // var url='http://localhost/DataInterface/Api';
+      // console.log('以下是将要提交的数据：\n',JSON.stringify(votes));
+      // this.$http.jsonp(
+      //   url,
+      //   {
+      //     params: {
+      //       Token:'79d84495ca776ccb523114a2120e273ca80b315b',
+      //       ID:'290',
+      //       M:'0',
+      //       cart:'1620A285',
+      //       cache:'60'
+      //     }
+      //   }
+      // ).then((response) => {
+      //   console.log(response.data);
+      //   this.$store.state.voteStep = this.$store.state.voteStep+1;
+      //   this.back();
+      //   this.$message({
+      //     message: '提交数据成功',
+      //     type: 'success'
+      //   });
+      // }, (response) => {
+      //     console.log(response);
+      // });
+      this.back();
         this.$message({
           message: '提交数据成功',
           type: 'success'
         });
-      }, (response) => {
-          console.log(response);
-      });
     }
   },
   watch: {
