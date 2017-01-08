@@ -14,7 +14,6 @@ Vue.use(ElementUI);
 import home from './components/Home';
 import vote from './components/Vote';
 import score from './components/Score';
-//import score from './assets/js/Score';
 
 //VUEX数据
 import store from './store';
