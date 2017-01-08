@@ -1,5 +1,5 @@
 <template>
-  <div id="vote">
+  <div>
     <h2 class="title">{{title}}</h2>
     <div class="content">说明：本轮最多评选{{limitSetting.excellent}}位优秀，{{limitSetting.good}}位良好。</div>
     <div>
@@ -24,7 +24,7 @@
         </div>
       </div>
       <div class="submit">
-        <button class="button" @click="submit">提交</button>
+        <button v-if="shouldSubmit" class="button" @click="submit">提交</button>
         <button class="button" @click="back">返回</button>
       </div>
     </div>
@@ -67,11 +67,15 @@ let vote = {
     },
     showDesc() {
       return this.$store.state.voteType == 0
+    },
+    shouldSubmit(){
+      return this.$store.state.voteStep == this.$route.params.id
     }
   },
   methods: {
     back() {
-      this.$router.go(-1);
+      //this.$router.go(-1);
+      this.$router.push('/home');
     },
     submit() {
 

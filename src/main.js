@@ -3,37 +3,43 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import VueResource from 'vue-resource';
+Vue.use(VueRouter);
+Vue.use(VueResource);
 
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-default/index.css';
+Vue.use(ElementUI);
 
 //组件资源
-import Vote from './components/Vote';
-import Home from './components/Home';
-
+import home from './components/Home';
+import vote from './components/Vote';
+import score from './components/Score';
+// const score = {
+// 	template: '<div><h2>我是第 1 个子页面</h2></div>'
+// };
 //VUEX数据
 import store from './store';
 
-Vue.use(VueRouter);
-Vue.use(VueResource);
-Vue.use(ElementUI);
 
 const routes = [{
 	path: '/',
-	component: Home
+	component: home
 }, {
 	path: '/home',
-	component: Home
+	component: home
 }, {
 	path: '/vote/:id',
-	component: Vote,
+	component: vote,
 	name: 'vote',
 	//命名路由 http://router.vuejs.org/zh-cn/essentials/named-routes.html
 }, {
 	path: '/vote',
-	component: Vote,
+	component: vote,
 	name: 'vote/0'
-}];
+}, {
+	path: '/score',
+	component: score
+}, ];
 
 const router = new VueRouter({
 	//mode: 'history',//启用后URL中无#字符，需做后端apache/nginx配置
@@ -46,7 +52,7 @@ var vm = new Vue({
 	router,
 	el: '#app',
 	template: '<router-view/>',
-	components: {
-		Home
-	}
+	// components: {
+	// 	Home
+	// }
 });

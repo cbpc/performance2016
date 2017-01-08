@@ -1,5 +1,5 @@
 <template>
-  <div id="home">
+  <div>
     <h2 class="title">2016年度绩效评价</h2>
     <div class="list">
       <el-steps :space="100" direction="vertical" finish-status="success" :active="active">
