@@ -1,17 +1,18 @@
-﻿# 2016绩效
-[https://cbpc.github.io/performance2016/develop](https://cbpc.github.io/performance2016/develop/)
+#2016绩效考评
 
-#install
-npm install --save-dev
+https://cbpc.github.io/performance2016/dist
 
-#build
-gulp -p
+> 2016年度绩效考评源程序。Vue+VueX+Vue-Router+Vue-Resource + Webpack开发。
 
-#develop
-gulp
+## 编译步骤
 
-#watch
-gulp dev
+``` bash
+# 安装依赖
+npm install
 
-##get babelHelpers
-cnpm install babel-cli -g
+# 开发模式
+npm run dev
+
+# 编译生成
+npm run build
+```
