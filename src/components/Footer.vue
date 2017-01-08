@@ -15,8 +15,7 @@ export default {
   }
 };
 </script>
-
-<style lang="less">
+<style>
   .footer{
     text-align:center;
     padding-top: 5px;

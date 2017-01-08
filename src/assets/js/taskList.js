@@ -1,7 +1,8 @@
 import cbpc from './listCBPC';
+import g3 from './listG3';
 const taskList = (type) => {
 	const list = [
-		cbpc.title, ['管理人员', '技术人员', '高级工']
+		cbpc.title, g3.title
 	];
 	return list[type];
 };

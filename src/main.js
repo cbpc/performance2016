@@ -36,6 +36,7 @@ const routes = [{
 }];
 
 const router = new VueRouter({
+	//mode: 'history',//启用后URL中无#字符，需做后端apache/nginx配置
 	routes
 });
 

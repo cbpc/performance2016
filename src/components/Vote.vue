@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <div id="vote">
     <h2 class="title">{{title}}</h2>
-    <div class="content">说明：本轮最多评选6位优秀，6位良好。</div>
+    <div class="content">说明：本轮最多评选{{limitSetting.excellent}}位优秀，{{limitSetting.good}}位良好。</div>
     <div>
       <div v-for="user,idx in users">
         <div class="card">
@@ -10,7 +10,7 @@
             <span class="depart">{{user.dpt}}</span>
           </div>
           <div class="card-content">
-            <p class="desc">{{user.desc}}</p>
+            <p class="desc" v-if="showDesc">{{user.desc}}</p>
             <div class="vote">
               <el-rate
                 v-model="user.value"
@@ -19,7 +19,7 @@
                 show-text>
               </el-rate>
             </div>
-            <p class="votenum">优秀:<span :class="{'warnning':warn.excellent}">{{curLimit.excellent}}</span> /6,良好:<span :class="{'warnning':warn.good}">{{curLimit.good}}</span>/6</p>
+            <p class="votenum">优秀:<span :class="{'warnning':warn.excellent}">{{curLimit.excellent}}</span> /{{limitSetting.excellent}},良好:<span :class="{'warnning':warn.good}">{{curLimit.good}}</span>/{{limitSetting.good}}</p>
           </div>
         </div>
       </div>
@@ -32,18 +32,21 @@
 </template>
 
 <script>
-
 import userList from '../assets/js/userList';
-import getUrlParam from '../assets/js/common';
+import app from '../assets/js/common';
 
-const isGM = (getUrlParam('gm') !== null) ? 1 : 0;
+const isGM = (app.getUrlParam('gm') !== null) ? 1 : 0;
 
-var vote = {
+let vote = {
   name: 'vote',
-  data(){
-    return{
-      title:'',
-      scoreList:['不称职', '基本称职', '称职', '良好', '优秀']
+  data() {
+    return {
+      title: '',
+      scoreList: ['不称职', '基本称职', '称职', '良好', '优秀'],
+      limitSetting: {
+        excellent: 0,
+        good: 0
+      }
     }
   },
   computed: {
@@ -56,80 +59,125 @@ var vote = {
     curLimit() {
       return this.$store.state.curLimit
     },
-    warn(){
-      return{
-        excellent:this.curLimit.excellent > 6,
-        good:this.curLimit.good > 6
+    warn() {
+      return {
+        excellent: this.curLimit.excellent > this.limitSetting.excellent,
+        good: this.curLimit.good > this.limitSetting.good
       }
+    },
+    showDesc() {
+      return this.$store.state.voteType == 0
     }
   },
-  methods:{
+  methods: {
     back() {
-      //调用mutations
-      //this.$store.commit('back')
-      this.$router.push('/');
+      this.$router.go(-1);
     },
     submit() {
-      //调用actions
-      //this.$store.dispatch('submit');
-      var votes = [];
-      var rate2Score=[0,3,5,7,8,10];
-      votes = this.$store.state.users.map(function(item) {
-        return [item.name, item.dpt, rate2Score[item.value], isGM];
+
+      if (this.warn.excellent || this.warn.good) {
+        this.$message({
+          message: '优秀或良好人数不符合规定',
+          type: 'error'
+        });
+        return;
+      }
+
+      let votes = [];
+      let rate2Score = [0, 3, 5, 7, 8, 10];
+      const dateName = app.getDate();
+      const voteTime = app.getDate(1);
+      //姓名，部门，得分，用户身份，是否领导评分，活动id，投票日期,提交时间
+      votes = this.$store.state.users.map((item) => {
+        return [item.name, item.dpt, rate2Score[item.value], this.title, isGM, this.$store.state.voteType, dateName, voteTime];
       });
-      //state.back();
-      //write the data to localStorage
-      // var url='http://localhost/DataInterface/Api';
-      // console.log('以下是将要提交的数据：\n',JSON.stringify(votes));
+
+      let url = '//cbpc540.applinzi.com/index.php?s=/addon/GoodVoice/GoodVoice/addPerformanceScore';
+      let params = JSON.stringify(votes).replace(/\],\[/g, '),(').replace('[[', '(').replace(']]', ')');
+      //console.log('This is the Data that will be submit:\n', params);
+
+      //jsonp用GET发送超大字符串时由于url长度限制报错
       // this.$http.jsonp(
-      //   url,
-      //   {
+      //   url, {
       //     params: {
-      //       Token:'79d84495ca776ccb523114a2120e273ca80b315b',
-      //       ID:'290',
-      //       M:'0',
-      //       cart:'1620A285',
-      //       cache:'60'
+      //       values: params,
       //     }
       //   }
       // ).then((response) => {
       //   console.log(response.data);
-      //   this.$store.state.voteStep = this.$store.state.voteStep+1;
       //   this.back();
       //   this.$message({
       //     message: '提交数据成功',
       //     type: 'success'
       //   });
-      // }, (response) => {
-      //     console.log(response);
       // });
-      this.$store.state.voteStep = this.$store.state.voteStep+1;
-      this.back();
-        this.$message({
-          message: '提交数据成功',
-          type: 'success'
-        });
+
+      //服务端控制器加入以下代码，允许跨域访问
+      /*// 指定允许其他域名访问
+      header('Access-Control-Allow-Origin:*');
+
+      // 响应类型
+      header('Access-Control-Allow-Methods:GET,POST,PUT');
+      header('Access-Control-Allow-Headers:x-requested-with,content-type');*/
+
+      //Vue-Resource中使用post需加入emulateJSON选项,否则无法解析数据
+      this.$http.post(
+        url, {
+          values: params,
+        }, {
+          emulateJSON: true
+        }
+      ).then((response) => {
+        var data = JSON.parse(response.data);
+        this.back();
+        if (data.status > '0') {
+          this.$message({
+            message: '提交数据成功',
+            type: 'success'
+          });
+        } else {
+          this.$message({
+            message: '服务器写入数据失败',
+            type: 'error'
+          });
+        }
+      }).catch((e) => {
+        console.log(e);
+      });
+
+      app.saveInfo({
+        step: this.$store.state.voteStep + 1,
+        type: this.$store.state.voteType
+      });
+      this.$store.state.voteStep = this.$store.state.voteStep + 1;
+      //remember write the data to localStorage
     }
   },
   watch: {
     users: {
       handler() {
-        let scoreLimit = this.$store.getters.scoreLimit;
-        if (scoreLimit.excellent > 6 || scoreLimit.good > 6) {
+        this.$store.state.curLimit = this.$store.getters.scoreLimit;
+        if (this.warn.excellent) {
           this.$message({
-            message: '最多只允许选取6名优秀/良好',
+            message: '最多只允许选取' + this.limitSetting.excellent + '名优秀',
             type: 'error'
           });
         }
-        this.$store.state.curLimit = scoreLimit;
+        if (this.warn.good) {
+          this.$message({
+            message: '最多只允许选取' + this.limitSetting.good + '名良好',
+            type: 'error'
+          });
+        }
       },
       deep: true
     }
   },
-  beforeMount(){
-    var userInfo = userList(this.$route.params.id);
+  beforeMount() {
+    let userInfo = userList(this.$route.params.id, this.$store.state.voteType);
     this.$store.state.users = userInfo.data;
     this.title = userInfo.title;
+    this.limitSetting = userInfo.limit;
   }
 };
 export default vote;
