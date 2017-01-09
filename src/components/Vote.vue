@@ -132,6 +132,13 @@ let vote = {
           emulateJSON: true
         }
       ).then((response) => {
+        if(!response.ok){
+          this.$message({
+            message: '数据提交失败',
+            type: 'error'
+          });
+          return;
+        }
         var data = JSON.parse(response.data);
         this.back();
         if (data.status > '0') {
@@ -145,16 +152,17 @@ let vote = {
             type: 'error'
           });
         }
-      }).catch((e) => {
-        console.log(e);
-      });
 
       app.saveInfo({
         step: this.$store.state.voteStep + 1,
         type: this.$store.state.voteType
       });
       this.$store.state.voteStep = this.$store.state.voteStep + 1;
-      //remember write the data to localStorage
+      }).catch((e) => {
+        console.log(e);
+      });
+
+
     }
   },
   watch: {

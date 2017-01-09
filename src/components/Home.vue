@@ -18,6 +18,8 @@
 import ElFooter from './Footer';
 import app from '../assets/js/common';
 const dateName = app.getDate();
+const needCheck = app.getUrlParam('check');
+needCheck =  ( needCheck !== null ) ? 1 : 0;
 let home = {
   name: 'home',
   computed: {
