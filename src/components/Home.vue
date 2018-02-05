@@ -11,6 +11,9 @@
       </el-steps>
     </div>
     <el-footer/>
+    <div class="submit">
+      <button class="button" @click="clear">清理缓存</button>
+    </div>
   </div>
 </template>
 
@@ -46,6 +49,14 @@ let home = {
           }
         });
       }
+    },
+    clear() {
+      localStorage.removeItem("performance-0");
+      localStorage.removeItem("performance-1");
+      this.$message({
+        message: "缓存清理完毕",
+        type: "success"
+      });
     }
   },
   components: {
