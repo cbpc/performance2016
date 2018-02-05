@@ -7,7 +7,7 @@ import app from "../assets/js/common";
 import taskList from "../assets/js/taskList";
 
 let voteType = app.getUrlParam("type");
-voteType = voteType == null ? 0 : Number.parseInt(voteType, 10);
+voteType = voteType == null ? 1 : Number.parseInt(voteType, 10);
 
 //vuex中数据
 const state = {

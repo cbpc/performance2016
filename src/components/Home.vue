@@ -1,9 +1,9 @@
 <template>
   <div>
-    <h2 class="title">2017年度绩效评价</h2>
+    <h2 class="title">年度绩效评价</h2>
     <div class="list">
       <el-steps :space="100" direction="vertical" finish-status="success" :active="active">
-        <div v-for="task,idx in taskList">
+        <div v-for="(task,idx) in taskList" :key="idx">
           <div @click="location(idx)">
             <el-step :title="(idx+1)+'.'+task"></el-step>
           </div>

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2 class="title">2017年度绩效评价得分</h2>
+    <h2 class="title">年度绩效评价得分</h2>
     <el-table :data="tableData" stripe style="width: 100%">
       <el-table-column prop="userType" label="类型">
       </el-table-column>

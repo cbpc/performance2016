@@ -1,5 +1,5 @@
 import { user as cbpc } from "./listCBPC";
-import { user as g3 } from "./listG3";
+import { user as g3 } from "./listPaper";
 const userList = (type, voteType) => {
     const DEFAULT_SCORE = 3;
     let list = [];
