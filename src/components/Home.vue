@@ -11,9 +11,9 @@
       </el-steps>
     </div>
     <el-footer/>
-    <div class="submit">
+    <!-- <div class="submit">
       <button class="button" @click="clear">清理缓存</button>
-    </div>
+    </div> -->
   </div>
 </template>
 
