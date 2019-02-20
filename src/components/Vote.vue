@@ -3,16 +3,27 @@
     <h2 class="title">{{title}}</h2>
     <div class="content">说明：本轮最多评选{{limitSetting.excellent}}位优秀，{{limitSetting.good}}位良好。</div>
     <div>
-      <div v-for="(user,idx) in users" :key="idx">
+      <div
+        v-for="(user,idx) in users"
+        :key="idx"
+      >
         <div class="card">
           <div class="card-header">
             <span>{{idx+1}}</span>.{{user.name}}
             <span class="depart">{{user.dpt}}</span>
           </div>
           <div class="card-content">
-            <p class="desc" v-if="showDesc">{{user.desc}}</p>
+            <p
+              class="desc"
+              v-if="showDesc"
+            >{{user.desc}}</p>
             <div class="vote">
-              <el-rate v-model="user.value" :texts="scoreList" :colors="['#99A9BF', '#F7BA2A', '#FF9900']" show-text>
+              <el-rate
+                v-model="user.value"
+                :texts="scoreList"
+                :colors="['#99A9BF', '#F7BA2A', '#FF9900']"
+                show-text
+              >
               </el-rate>
             </div>
             <p class="votenum">优秀:
@@ -22,8 +33,15 @@
         </div>
       </div>
       <div class="submit">
-        <button v-if="shouldSubmit&&!hideSubmit" class="button" @click="submit">提交</button>
-        <button class="button" @click="back">返回</button>
+        <button
+          v-if="shouldSubmit&&!hideSubmit"
+          class="button"
+          @click="submit"
+        >提交</button>
+        <button
+          class="button"
+          @click="back"
+        >返回</button>
       </div>
     </div>
   </div>
@@ -32,6 +50,7 @@
 <script>
 import userList from "../assets/js/userList";
 import app from "../assets/js/common";
+import * as db from "../assets/js/db";
 
 const isGM = app.getUrlParam("gm") !== null ? 1 : 0;
 
@@ -78,7 +97,7 @@ let vote = {
       //this.$router.go(-1);
       this.$router.push("/home");
     },
-    submit() {
+    async submit() {
       if (this.warn.excellent || this.warn.good) {
         this.$message({
           message: "优秀或良好人数不符合规定",
@@ -92,69 +111,39 @@ let vote = {
       const dateName = app.getDate();
       const voteTime = app.getDate(1);
       //姓名，部门，得分，用户身份，是否领导评分，活动id，投票日期,提交时间
-      votes = this.$store.state.users.map(item => {
-        return [
-          item.name,
-          item.dpt,
-          rate2Score[item.value],
-          this.title,
-          isGM,
-          this.$store.state.voteType,
-          dateName,
-          voteTime
-        ];
+      votes = this.$store.state.users.map(item => ({
+        user: item.name,
+        dpt: item.dpt,
+        score: rate2Score[item.value],
+        usertype: this.title,
+        isgm: isGM,
+        sportid: this.$store.state.voteType,
+        votedate: dateName,
+        votetime: voteTime
+      }));
+
+      let {
+        data: [res]
+      } = await db.addCbpcPerformance(votes);
+      if (res.affected_rows == 0) {
+        this.$message({
+          message: "数据提交失败",
+          type: "error"
+        });
+        return;
+      }
+
+      this.back();
+      this.$message({
+        message: "提交数据成功",
+        type: "success"
       });
 
-      let url =
-        "//cbpc540.applinzi.com/index.php?s=/addon/GoodVoice/GoodVoice/addPerformanceScore";
-      let params = JSON.stringify(votes)
-        .replace(/\],\[/g, "),(")
-        .replace("[[", "(")
-        .replace("]]", ")");
-
-      //Vue-Resource中使用post需加入emulateJSON选项,否则无法解析数据
-      this.$http
-        .post(
-          url,
-          {
-            values: params
-          },
-          {
-            emulateJSON: true
-          }
-        )
-        .then(response => {
-          if (!response.ok) {
-            this.$message({
-              message: "数据提交失败",
-              type: "error"
-            });
-            return;
-          }
-
-          var data = response.data;
-          this.back();
-          if (data.status > "0") {
-            this.$message({
-              message: "提交数据成功",
-              type: "success"
-            });
-          } else {
-            this.$message({
-              message: "服务器写入数据失败",
-              type: "error"
-            });
-          }
-
-          app.saveInfo({
-            step: this.$store.state.voteStep + 1,
-            type: this.$store.state.voteType
-          });
-          this.$store.state.voteStep = this.$store.state.voteStep + 1;
-        })
-        .catch(e => {
-          console.log(e);
-        });
+      app.saveInfo({
+        step: this.$store.state.voteStep + 1,
+        type: this.$store.state.voteType
+      });
+      this.$store.state.voteStep = this.$store.state.voteStep + 1;
     }
   },
   watch: {
