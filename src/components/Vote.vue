@@ -124,7 +124,13 @@ let vote = {
 
       let {
         data: [res]
-      } = await db.addCbpcPerformance(votes);
+      } = await db.addCbpcPerformance(votes).catch(e => {
+        this.$message({
+          message: "数据提交失败",
+          type: "error"
+        });
+        console.log(e);
+      });
       if (res.affected_rows == 0) {
         this.$message({
           message: "数据提交失败",

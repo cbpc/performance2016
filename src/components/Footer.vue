@@ -2,7 +2,10 @@
   <div class="footer">
     <p>本程序为无记名投票,
       <a href="https://github.com/cbpc/performance2016">源代码</a>开源至github.</p>
-    <p class="copyright" v-html="message"></p>
+    <p
+      class="copyright"
+      v-html="message"
+    ></p>
   </div>
 </template>
 
@@ -11,7 +14,7 @@ export default {
   name: "el-footer",
   data() {
     return {
-      message: "2017 &copy; CBPC All Rights Reserved."
+      message: "2019 &copy; CBPC All Rights Reserved."
     };
   }
 };
