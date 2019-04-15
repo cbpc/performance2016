@@ -2,15 +2,23 @@
   <div>
     <h2 class="title">年度绩效评价</h2>
     <div class="list">
-      <el-steps :space="100" direction="vertical" finish-status="success" :active="active">
-        <div v-for="(task,idx) in taskList" :key="idx">
+      <el-steps
+        :space="100"
+        direction="vertical"
+        finish-status="success"
+        :active="active"
+      >
+        <div
+          v-for="(task,idx) in taskList"
+          :key="idx"
+        >
           <div @click="location(idx)">
             <el-step :title="(idx+1)+'.'+task"></el-step>
           </div>
         </div>
       </el-steps>
     </div>
-    <el-footer/>
+    <el-footer />
     <!-- <div class="submit">
       <button class="button" @click="clear">清理缓存</button>
     </div> -->
@@ -39,13 +47,17 @@ let home = {
       return this.$store.state.voteStep;
     }
   },
+  mounted() {
+    console.log(this.$store.state.voteType);
+  },
   methods: {
     location(idx) {
       if (idx == this.$store.state.voteStep) {
         this.$router.push({
           name: "vote",
           params: {
-            id: idx
+            id: idx,
+            type: this.$store.state.voteType
           }
         });
       }
