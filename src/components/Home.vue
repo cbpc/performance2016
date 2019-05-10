@@ -49,6 +49,7 @@ let home = {
   },
   mounted() {
     console.log(this.$store.state.voteType);
+    console.log(this.$store.state.isgm);
   },
   methods: {
     location(idx) {

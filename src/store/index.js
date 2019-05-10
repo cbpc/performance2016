@@ -9,10 +9,12 @@ import taskList from '../assets/js/taskList';
 // 默认部门/公司
 let voteType = app.getUrlParam('type');
 voteType = voteType == null ? 1 : Number.parseInt(voteType, 10);
+let isgm = app.getUrlParam('gm') !== null ? 1 : app.getUrlParam('gm');
 
 //vuex中数据
 const state = {
   voteType: voteType, //默认公司测试
+  isgm,
   voteStep: 0,
   users: [],
   curLimit: {

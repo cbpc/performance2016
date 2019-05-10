@@ -52,8 +52,8 @@ import userList from "../assets/js/userList";
 import app from "../assets/js/common";
 import * as db from "../assets/js/db";
 
-const isGM = app.getUrlParam("gm") !== null ? 1 : 0;
-
+// const isGM = app.getUrlParam("gm") !== null ? 1 : 0;
+// console.log(isGM);
 let vote = {
   name: "vote",
   data() {
@@ -116,12 +116,13 @@ let vote = {
         dpt: item.dpt,
         score: rate2Score[item.value],
         usertype: this.title,
-        isgm: isGM,
+        isgm: this.$store.state.isgm,
         sportid: this.$store.state.voteType,
         votedate: dateName,
         votetime: voteTime
       }));
-
+      console.log(votes);
+      return;
       let {
         data: [res]
       } = await db.addCbpcPerformance(votes).catch(e => {
