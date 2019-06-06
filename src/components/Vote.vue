@@ -122,7 +122,7 @@ let vote = {
         votetime: voteTime
       }));
       console.log(votes);
-      return;
+      // return;
       let {
         data: [res]
       } = await db.addCbpcPerformance(votes).catch(e => {
